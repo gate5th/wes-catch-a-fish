@@ -1,11 +1,13 @@
 // let's go!
 import React from 'react';
 import ReactDOM from 'react-dom';
-import StorePicker from'./components/StorePicker';
+import './css/style.css';
 
+import StorePicker from './components/StorePicker';
+import App from './components/App';
 
 
 ReactDOM.render(
-  <StorePicker/>,
+  <App/>,
   document.getElementById('main')
 );
