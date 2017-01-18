@@ -14,6 +14,7 @@ class App extends React.Component{
     //have to bind each class method (except render) to the component
     this.addFish = this.addFish.bind(this);
     this.loadSamples = this.loadSamples.bind(this);
+    this.addToOrder = this.addToOrder.bind(this);
 
     //same as getInitialState
     this.state = {
@@ -41,6 +42,19 @@ class App extends React.Component{
     this.setState({fishes: sampleFishes});
   }
 
+  //this method will be called from within the Fish component
+  //and the argument is just the key corresponding to the particular
+  // fish subobject. The reason we don't pass the fish up is because the
+  //state with the fish data already lives up in the App, and the fish
+  //component only has a copy of it. By passing the key, we can pick the
+  //corresponding fish from the fish state that's already in the App
+
+  addToOrder(key) {
+    const order = {...this.state.order};
+    order[key] = order[key] +1 || 1; //we use key instead of timestamp so each order for each fish (identified by key) either overwrites the previous ourder (by replacing it with an order for another pound) or creates a brand new order for 1 point if the key doesn't already have an order associated
+    this.setState({order: order });
+  }
+
   //need to loop over fish subobject from state and display
   //<Fish /> component for each. Use Object.keys(this.state.fishes)
   //to return an array of just the keys from the object. To
@@ -64,7 +78,9 @@ class App extends React.Component{
                   .map((key) =>
                     <Fish
                       key={key}
+                      index={key}
                       details={this.state.fishes[key]}
+                      addToOrder={this.addToOrder}
                     />
                   )
             }
@@ -78,3 +94,7 @@ class App extends React.Component{
 }
 
 export default App
+
+//the reason you assing key twice when passing props to fish (once as key and
+// once as index) is because react won't allow you to access the key prop. It
+//uses it itself and doesn't want you touching it. Go figure.
