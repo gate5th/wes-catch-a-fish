@@ -2,8 +2,10 @@ import React from 'react';
 import Header from './Header';
 import Order from './Order';
 import Inventory from './Inventory';
-import sampleFishes from '../sample-fishes';
 import Fish from './Fish';
+import base from '../base';
+import sampleFishes from '../sample-fishes';
+
 
 class App extends React.Component{
 
@@ -21,6 +23,20 @@ class App extends React.Component{
       fishes: {},
       order: {}
     }
+  }
+
+  componentWillMount(){
+    this.ref = base.syncState(
+      `${this.props.params.storeId}/fishes`,
+      {
+        context: this,
+        state: 'fishes'
+      }
+    )
+  }
+
+  componentWillUnmount(){
+    base.removeBinding(this.ref);
   }
 
   addFish(fish) {  //modifies state when add a fish
